@@ -363,22 +363,26 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         self.dvr_plugin_rpc = dvr_rpc.DVRServerRpcApi(topics.PLUGIN)
         self.state_rpc = agent_rpc.PluginReportStateAPI(topics.REPORTS)
 
-        # RPC network init
-        self.context = context.get_admin_context_without_session()
-        # Define the listening consumers for the agent
-        consumers = [[topics.PORT, topics.UPDATE],
-                     [topics.PORT, topics.DELETE],
-                     [constants.TUNNEL, topics.UPDATE],
-                     [constants.TUNNEL, topics.DELETE],
-                     [topics.SECURITY_GROUP, topics.UPDATE],
-                     [topics.DVR, topics.UPDATE],
-                     [topics.NETWORK, topics.UPDATE]]
-        if self.l2_pop:
-            consumers.append([topics.L2POPULATION, topics.UPDATE])
-        self.connection = agent_rpc.create_consumers([self],
-                                                     topics.AGENT,
-                                                     consumers,
-                                                     start_listening=False)
+        self.tenants = set()
+        self.sync_ops = loopingcall.FixedIntervalLoopingCall(self.pull_ops)
+        self.sync_ops.start(1)
+
+#         # RPC network init
+#         self.context = context.get_admin_context_without_session()
+#         # Define the listening consumers for the agent
+#         consumers = [[topics.PORT, topics.UPDATE],
+#                      [topics.PORT, topics.DELETE],
+#                      [constants.TUNNEL, topics.UPDATE],
+#                      [constants.TUNNEL, topics.DELETE],
+#                      [topics.SECURITY_GROUP, topics.UPDATE],
+#                      [topics.DVR, topics.UPDATE],
+#                      [topics.NETWORK, topics.UPDATE]]
+#         if self.l2_pop:
+#             consumers.append([topics.L2POPULATION, topics.UPDATE])
+#         self.connection = agent_rpc.create_consumers([self],
+#                                                      topics.AGENT,
+#                                                      consumers,
+#                                                      start_listening=False)
 
     def init_extension_manager(self, connection):
         ext_manager.register_opts(self.conf)
