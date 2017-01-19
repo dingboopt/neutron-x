@@ -1798,6 +1798,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         else:
             consecutive_resyncs = 0
             events = polling_manager.get_events()
+            LOG.debug("--------------!!!!!! events is %s" %events)
             port_info, ancillary_port_info, ports_not_ready_yet = (
                 self.process_ports_events(events, ports, ancillary_ports,
                                           ports_not_ready_yet,
