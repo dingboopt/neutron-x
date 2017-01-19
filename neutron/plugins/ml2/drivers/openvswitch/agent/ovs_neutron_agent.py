@@ -357,6 +357,9 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                                p_const.TYPE_GRE: {},
                                p_const.TYPE_VXLAN: {}}
 
+    def _pull_ops(self):
+        LOG.debug("pull ops from server")
+    
     def setup_rpc(self):
         self.plugin_rpc = OVSPluginApi(topics.PLUGIN)
         self.sg_plugin_rpc = sg_rpc.SecurityGroupServerRpcApi(topics.PLUGIN)
@@ -364,7 +367,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         self.state_rpc = agent_rpc.PluginReportStateAPI(topics.REPORTS)
 
         self.tenants = set()
-        self.sync_ops = loopingcall.FixedIntervalLoopingCall(self.pull_ops)
+        self.sync_ops = loopingcall.FixedIntervalLoopingCall(self._pull_ops)
         self.sync_ops.start(1)
 
 #         # RPC network init
