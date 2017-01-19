@@ -290,7 +290,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         self.catch_sighup = False
 
         # The initialization is complete; we can start receiving messages
-        self.connection.consume_in_threads()
+        #self.connection.consume_in_threads()
 
         self.quitting_rpc_timeout = agent_conf.quitting_rpc_timeout
 
