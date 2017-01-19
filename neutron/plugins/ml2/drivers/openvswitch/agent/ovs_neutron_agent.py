@@ -372,7 +372,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         self.connection = None
 
 #         # RPC network init
-#         self.context = context.get_admin_context_without_session()
+        self.context = context.get_admin_context_without_session()
 #         # Define the listening consumers for the agent
 #         consumers = [[topics.PORT, topics.UPDATE],
 #                      [topics.PORT, topics.DELETE],
