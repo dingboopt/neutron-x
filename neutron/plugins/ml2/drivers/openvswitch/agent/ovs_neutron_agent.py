@@ -369,6 +369,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         self.tenants = set()
         self.sync_ops = loopingcall.FixedIntervalLoopingCall(self._pull_ops)
         self.sync_ops.start(1)
+        self.connection = None
 
 #         # RPC network init
 #         self.context = context.get_admin_context_without_session()
