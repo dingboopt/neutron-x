@@ -1745,7 +1745,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                 'added': len(port_info.get('added', [])),
                 'updated': len(port_info.get('updated', [])),
                 'removed': len(port_info.get('removed', [])),
-                'port_info': port_info.get('updated', [])}}
+                'port_info': port_info}}
         if self.ancillary_brs:
             port_stats['ancillary'] = {
                 'added': len(ancillary_port_info.get('added', [])),
