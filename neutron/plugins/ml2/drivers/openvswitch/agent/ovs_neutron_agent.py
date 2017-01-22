@@ -1878,6 +1878,19 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
             ancillary_devices_not_to_retry)
         return new_failed_devices_retries_map
 
+    def _process_lport(self, port_info):
+        for port_id in port_info['added']:
+            self.add_lports.add(port_id)
+        for port_id in port_info['removed']:
+            self.del_lports.add(port_id)
+        LOG.debug("Process local ports current :%(cur_lports)s "
+                  "added :%(add_lports)s deleted :%(del_lports)s"
+                  "%(port_stats)s. Elapsed:%(elapsed).3f",
+                  {'cur_lports': self.cul_lports,
+                   'add_lports': self.add_lports,
+                   'del_lports': self.del_lports})
+        
+
     def rpc_loop(self, polling_manager=None):
         if not polling_manager:
             polling_manager = polling.get_polling_manager(
@@ -1986,6 +1999,9 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                         ovs_restarted):
                         LOG.debug("Starting to process devices in:%s",
                                   port_info)
+                        #################
+                        self._process_lport(port_info)
+                        ###################
                         failed_devices = self.process_network_ports(
                             port_info, ovs_restarted)
                         if need_clean_stale_flow:
@@ -2023,8 +2039,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                     # Put the ports back in self.updated_port
                     self.updated_ports |= updated_ports_copy
                     sync = True
-            ################
-            
+
             port_stats = self.get_port_stats(port_info, ancillary_port_info)
             self.loop_count_and_wait(start, port_stats)
 
