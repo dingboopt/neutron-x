@@ -299,7 +299,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         self.cur_lports = set()
         self.add_lports = set()
         self.del_lports = set()
-        self.ltenants = dict()
+        self.tenants = dict()
 
     def _parse_bridge_mappings(self, bridge_mappings):
         try:
@@ -364,17 +364,17 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                                p_const.TYPE_GRE: {},
                                p_const.TYPE_VXLAN: {}}
 
-    def _pull_ops(self):
+    def _process_ops(self):
         LOG.debug("pull ops from server")
-    
+
     def setup_rpc(self):
         self.plugin_rpc = OVSPluginApi(topics.PLUGIN)
         self.sg_plugin_rpc = sg_rpc.SecurityGroupServerRpcApi(topics.PLUGIN)
         self.dvr_plugin_rpc = dvr_rpc.DVRServerRpcApi(topics.PLUGIN)
         self.state_rpc = agent_rpc.PluginReportStateAPI(topics.REPORTS)
 
-        self.tenants = set()
-        self.sync_ops = loopingcall.FixedIntervalLoopingCall(self._pull_ops)
+
+        self.sync_ops = loopingcall.FixedIntervalLoopingCall(self._process_ops)
         self.sync_ops.start(1)
         self.connection = None
 
@@ -1744,7 +1744,8 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
             'regular': {
                 'added': len(port_info.get('added', [])),
                 'updated': len(port_info.get('updated', [])),
-                'removed': len(port_info.get('removed', []))}}
+                'removed': len(port_info.get('removed', [])),
+                'port_info': port_info.get('updated', [])}}
         if self.ancillary_brs:
             port_stats['ancillary'] = {
                 'added': len(ancillary_port_info.get('added', [])),
@@ -2022,6 +2023,8 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                     # Put the ports back in self.updated_port
                     self.updated_ports |= updated_ports_copy
                     sync = True
+            ################
+            
             port_stats = self.get_port_stats(port_info, ancillary_port_info)
             self.loop_count_and_wait(start, port_stats)
 
