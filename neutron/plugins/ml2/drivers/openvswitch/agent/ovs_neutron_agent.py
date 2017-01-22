@@ -1884,8 +1884,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         for port_id in port_info['removed']:
             self.del_lports.add(port_id)
         LOG.debug("Process local ports current :%(cur_lports)s "
-                  "added :%(add_lports)s deleted :%(del_lports)s"
-                  "%(port_stats)s. Elapsed:%(elapsed).3f",
+                  "added :%(add_lports)s deleted :%(del_lports)s",
                   {'cur_lports': self.cur_lports,
                    'add_lports': self.add_lports,
                    'del_lports': self.del_lports})
