@@ -43,6 +43,11 @@ from neutron.common import constants as n_const
 from neutron.common import ipv6_utils as ipv6
 from neutron.common import topics
 from neutron.common import utils as n_utils
+
+###############
+from neutron.db import api as neutron_db_api
+from networking_wqq.db import models
+
 from neutron import context
 from neutron.plugins.common import constants as p_const
 from neutron.plugins.common import utils as p_utils
@@ -195,6 +200,10 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         self.lnetworks = dict()
         self.lsubnets = dict()
         self.lrouters = dict()
+        
+        
+        session = neutron_db_api.get_session()
+        op = session.query(models.Operation).first()
         #################################
         
         self.setup_rpc()
