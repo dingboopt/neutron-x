@@ -298,8 +298,12 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         ##################################
         self.cur_lports = set()
         self.add_lports = set()
+        self.fail_lports = set()
         self.del_lports = set()
         self.tenants = dict()
+        self.lnetworks = dict()
+        self.lsubnets = dict()
+        self.lrouters = dict()
 
     def _parse_bridge_mappings(self, bridge_mappings):
         try:
@@ -366,6 +370,73 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
 
     def _process_ops(self):
         LOG.debug("pull ops from server")
+        new_tenant = set()
+        #1. extract tenants
+        for lport in self.fail_lports:
+            tenant = self._extract_tenant(lport)
+            if tenant is None:
+                continue
+            else:
+                new_tenant.add(tenant)
+        for lport in self.add_lports:
+            tenant = self._extract_tenant(lport)
+            if tenant is None:
+                self.fail_lports.add(lport)
+                self.add_lports.remove(lport)
+            else:
+                new_tenant.add(tenant)
+
+        for lport in self.del_lports:
+            #1. timestamp tenants of cunter 0
+            #2. timestamp qr/subnets router
+            pass
+
+        #2. find l2 changes
+        for lport in self.add_lports:
+            network = self._lport_to_subnet(lport)
+            if network is None:
+                continue
+            elif network in self.lnetworks:
+                #ref count ++
+                pass
+            else:
+                self.lnetworks[network]={}
+                #install l2 pop
+
+        for lport in self.add_lports:
+            #3. find l3 changes
+            subnet = self._lport_to_subnet(lport)
+            if subnet is None:
+                LOG.error("port subnet not found!")
+                continue
+            #from memory cache
+            router = self._subnet_to_router(subnet)
+            if router is None:
+                LOG.debug("port subnet not bind router")
+                continue
+            if subnet in self.lsubnets.keys():
+                #ref counter ++
+                pass
+            else:
+                #plug qr port
+                #if pr exists in mem cache, plug it; else pass
+                pass
+            if router in self.lrouters:
+                #ref router counter ++
+                pass
+            else:
+                #ref router counter ++
+                #install all router resources(routes etc)
+                pass
+
+        #3. according to local tenants, pull ops.
+        for tenant in new_tenant:
+            self._install_new_tenant_rsc(new_tenant)
+        ops = self._pull_newops()
+        for op in ops:
+            #install op in south-bound
+            #update local resource
+            pass
 
     def setup_rpc(self):
         self.plugin_rpc = OVSPluginApi(topics.PLUGIN)
