@@ -185,6 +185,18 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         self.network_ports = collections.defaultdict(set)
         # keeps association between ports and ofports to detect ofport change
         self.vifname_to_ofport_map = {}
+        
+        ##################################
+        self.cur_lports = set()
+        self.add_lports = set()
+        self.fail_lports = set()
+        self.del_lports = set()
+        self.tenants = dict()
+        self.lnetworks = dict()
+        self.lsubnets = dict()
+        self.lrouters = dict()
+        #################################
+        
         self.setup_rpc()
         self.bridge_mappings = self._parse_bridge_mappings(
             ovs_conf.bridge_mappings)
@@ -293,17 +305,6 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         #self.connection.consume_in_threads()
 
         self.quitting_rpc_timeout = agent_conf.quitting_rpc_timeout
-        
-        
-        ##################################
-        self.cur_lports = set()
-        self.add_lports = set()
-        self.fail_lports = set()
-        self.del_lports = set()
-        self.tenants = dict()
-        self.lnetworks = dict()
-        self.lsubnets = dict()
-        self.lrouters = dict()
 
     def _parse_bridge_mappings(self, bridge_mappings):
         try:
