@@ -205,7 +205,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         session = neutron_db_api.get_session()
         op = session.query(models.Operation).first()
         
-        
+        self.counter = 0
         
         
         ####################local cache (ovsdb)#############
@@ -390,6 +390,10 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         LOG.debug("pull ops from server")
         
         ####for test
+        if self.counter != 20:
+            self.counter = self.counter + 1
+            return
+        
         self.nports['port_uuid'] = {'device': device,
                          'network_id': port['network_id'],
                          'port_id': port['id'],
@@ -406,8 +410,8 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                          'network_qos_policy_id': None,
                          'security_groups':port['security_groups'],
                          'profile': {}}
-        
-        
+
+        self.port_update(None, port={'id':'uuid'})
         new_tenant = set()
         #1. extract tenants
         for lport in self.fail_lports:
