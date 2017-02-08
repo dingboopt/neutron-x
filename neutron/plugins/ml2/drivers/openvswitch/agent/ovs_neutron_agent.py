@@ -204,6 +204,14 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         
         session = neutron_db_api.get_session()
         op = session.query(models.Operation).first()
+        
+        
+        
+        
+        ####################local cache (ovsdb)#############
+        self.nnetworks = dict()
+        self.nsunbets = dict()
+        self.nports = dict()
         #################################
         
         self.setup_rpc()
@@ -380,6 +388,26 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
 
     def _process_ops(self):
         LOG.debug("pull ops from server")
+        
+        ####for test
+        self.nports['port_uuid'] = {'device': device,
+                         'network_id': port['network_id'],
+                         'port_id': port['id'],
+                         'mac_address': port['mac_address'],
+                         'admin_state_up': port['admin_state_up'],
+                         'network_type': port['network_type'],
+                         'segmentation_id': port['segmentation_id'],
+                         'physical_network': port['physical_network'],
+                         'fixed_ips': port['fixed_ips'],
+                         'device_owner': port['device_owner'],
+                         'allowed_address_pairs': [],
+                         'port_security_enabled': False,
+                         'qos_policy_id': None,
+                         'network_qos_policy_id': None,
+                         'security_groups':port['security_groups'],
+                         'profile': {}}
+        
+        
         new_tenant = set()
         #1. extract tenants
         for lport in self.fail_lports:
@@ -1535,12 +1563,51 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                     br.cleanup_tunnel_port(ofport)
                     self.tun_br_ofports[tunnel_type].pop(remote_ip, None)
 
+
+    def get_devices_details_list_and_failed_devices(self, context, devices,
+                                                    agent_id, host=None):
+        """Get devices details and the list of devices that failed.
+
+        This method returns the devices details. If an error is thrown when
+        retrieving the devices details, the device is put in a list of
+        failed devices.
+        """
+        devices = []
+        failed_devices = []
+        for device in devices:
+            if device in self.nports.keys():
+                port = self.nports[device]
+                entry = {'device': device,
+                         'network_id': port['network_id'],
+                         'port_id': port['id'],
+                         'mac_address': port['mac_address'],
+                         'admin_state_up': port['admin_state_up'],
+                         'network_type': port['network_type'],
+                         'segmentation_id': port['segmentation_id'],
+                         'physical_network': port['physical_network'],
+                         'fixed_ips': port['fixed_ips'],
+                         'device_owner': port['device_owner'],
+                         'allowed_address_pairs': [],
+                         'port_security_enabled': False,
+                         'qos_policy_id': None,
+                         'network_qos_policy_id': None,
+                         'security_groups':port['security_groups'],
+                         'profile': {}}
+                LOG.debug("Returning: %s!!!!!!!!", entry)
+                devices.append(entry)
+            else:
+                LOG.debug("device not sync yet!!!!!!!!!!1", device)
+                failed_devices.append(devices)
+
+        return {'devices': devices,
+                'failed_devices': failed_devices}
+
     def treat_devices_added_or_updated(self, devices, ovs_restarted):
         skipped_devices = []
         need_binding_devices = []
         security_disabled_devices = []
         devices_details_list = (
-            self.plugin_rpc.get_devices_details_list_and_failed_devices(
+            self.get_devices_details_list_and_failed_devices(
                 self.context,
                 devices,
                 self.agent_id,
