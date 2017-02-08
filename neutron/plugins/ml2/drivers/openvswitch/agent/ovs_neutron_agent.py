@@ -1572,14 +1572,14 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         retrieving the devices details, the device is put in a list of
         failed devices.
         """
-        devices = []
+        suc_devices = []
         failed_devices = []
         for device in devices:
             if device in self.nports.keys():
                 port = self.nports[device]
                 entry = {'device': device,
                          'network_id': port['network_id'],
-                         'port_id': port['id'],
+                         'port_id': port['port_id'],
                          'mac_address': port['mac_address'],
                          'admin_state_up': port['admin_state_up'],
                          'network_type': port['network_type'],
@@ -1591,15 +1591,15 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                          'port_security_enabled': False,
                          'qos_policy_id': None,
                          'network_qos_policy_id': None,
-                         'security_groups':port['security_groups'],
+                         #'security_groups':port['security_groups'],
                          'profile': {}}
                 LOG.debug("Returning: %s!!!!!!!!", entry)
-                devices.append(entry)
+                suc_devices.append(entry)
             else:
                 LOG.debug("device not sync yet!!!!!!!!!!1", device)
-                failed_devices.append(devices)
+                failed_devices.append(device)
 
-        return {'devices': devices,
+        return {'devices': suc_devices,
                 'failed_devices': failed_devices}
 
     def treat_devices_added_or_updated(self, devices, ovs_restarted):

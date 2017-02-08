@@ -104,11 +104,13 @@ class PluginApi(object):
         self.client = n_rpc.get_client(target)
 
     def get_device_details(self, context, device, agent_id, host=None):
+        raise
         cctxt = self.client.prepare()
         return cctxt.call(context, 'get_device_details', device=device,
                           agent_id=agent_id, host=host)
 
     def get_devices_details_list(self, context, devices, agent_id, host=None):
+        raise
         try:
             cctxt = self.client.prepare(version='1.3')
             res = cctxt.call(context, 'get_devices_details_list',
@@ -133,6 +135,7 @@ class PluginApi(object):
         retrieving the devices details, the device is put in a list of
         failed devices.
         """
+        raise
         try:
             cctxt = self.client.prepare(version='1.5')
             res = cctxt.call(
