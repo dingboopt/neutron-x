@@ -31,6 +31,9 @@ from six import moves
 from neutron._i18n import _, _LE, _LI, _LW
 from neutron.agent.common import ip_lib
 from neutron.agent.common import ovs_lib
+#####################
+from neutron.agent.common import ovs_topo_lib
+#####################
 from neutron.agent.common import polling
 from neutron.agent.common import utils
 from neutron.agent.l2.extensions import manager as ext_manager
@@ -209,6 +212,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         
         
         ####################local cache (ovsdb)#############
+        self.topo = ovs_topo_lib.OVSTopo()
         self.nnetworks = dict()
         self.nsunbets = dict()
         self.nports = dict()

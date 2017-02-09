@@ -22,7 +22,7 @@ from six.moves import queue as Queue
 
 from neutron._i18n import _
 from neutron.agent.ovsdb import topo_api
-from neutron.agent.ovsdb.native import commands as cmd
+from neutron.agent.ovsdb.native import topo_commands as cmd
 from neutron.agent.ovsdb.native import connection
 from neutron.agent.ovsdb.native import idlutils
 
@@ -126,6 +126,9 @@ class OvsdbTopoIdl(topo_api.API):
         return Transaction(self, OvsdbTopoIdl.ovsdb_connection,
                            self.context.vsctl_timeout,
                            check_error, log_errors)
+
+    def update_port(self, port_uuid):
+        return cmd.AddBridgeCommand(self,port_uuid)
 
     def add_br(self, name, may_exist=True, datapath_type=None):
         return cmd.AddBridgeCommand(self, name, may_exist, datapath_type)
