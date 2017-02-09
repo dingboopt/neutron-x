@@ -1600,7 +1600,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                 LOG.debug("Returning: %s!!!!!!!!", entry)
                 suc_devices.append(entry)
             else:
-                LOG.debug("device not sync yet!!!!!!!!!!1", device)
+                LOG.debug("device %s not sync yet!!!!!!!!!!1", device)
                 failed_devices.append(device)
 
         return {'devices': suc_devices,
