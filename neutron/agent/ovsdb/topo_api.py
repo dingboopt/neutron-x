@@ -84,7 +84,7 @@ class API(object):
     def get(context, iface_name=None):
         """Return the configured OVSDB API implementation"""
         iface = importutils.import_class(
-            interface_map[iface_name or cfg.CONF.OVS.ovsdb_interface])
+            interface_map[iface_name or cfg.CONF.OVS.ovsdb_topo_interface])
         return iface(context)
 
     @abc.abstractmethod
