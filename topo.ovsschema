@@ -9,7 +9,7 @@
                 "data": {
                     "type": {"key": "string", "value": "string",
                              "min": 0, "max": "unlimited"}}},
-            "isRoot": true}
+            "isRoot": true},
         "Subnet": {
             "columns": {
                 "uuid": {"type": "string"},
@@ -17,7 +17,7 @@
                 "data": {
                     "type": {"key": "string", "value": "string",
                              "min": 0, "max": "unlimited"}}},
-            "isRoot": true}
+            "isRoot": true},
         "Port": {
             "columns": {
                 "uuid": {"type": "string"},
