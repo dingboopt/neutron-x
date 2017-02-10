@@ -66,7 +66,7 @@ class OVSTopo(object):
         self.ovsdb = ovstopo.API.get(self)
 
     def db_create(self, table, **col_values):
-        self.ovsdb.db_create(table, **col_values).execute()
+        return self.ovsdb.db_create(table, **col_values).execute()
 
     def update_port(self, port_uuid):
         self.ovsdb.update_port(port_uuid).execute()
