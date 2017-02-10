@@ -3,10 +3,25 @@
     "version": "0.0.1",
     "cksum": "4176761817 11225",
     "tables": {
+        "Network":{
+            "columns": {
+                "uuid": {"type": "string"},
+                "data": {
+                    "type": {"key": "string", "value": "string",
+                             "min": 0, "max": "unlimited"}}},
+            "isRoot": true}
+        "Subnet": {
+            "columns": {
+                "uuid": {"type": "string"},
+                "network": {"type": "string"},
+                "data": {
+                    "type": {"key": "string", "value": "string",
+                             "min": 0, "max": "unlimited"}}},
+            "isRoot": true}
         "Port": {
             "columns": {
-                "port_uuid": {"type": "string"},
-                "net_uuid": {"type": "string"},
+                "uuid": {"type": "string"},
+                "network": {"type": "string"},
                 "host": {"type": "string"},
                 "data": {
                     "type": {"key": "string", "value": "string",
