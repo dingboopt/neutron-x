@@ -65,6 +65,9 @@ class OVSTopo(object):
         self.vsctl_timeout = cfg.CONF.ovs_vsctl_timeout
         self.ovsdb = ovstopo.API.get(self)
 
+    def db_create(self, table, **col_values):
+        self.ovsdb.db_create(table, **col_values).execute()
+
     def update_port(self, port_uuid):
         self.ovsdb.update_port(port_uuid).execute()
 

@@ -128,7 +128,7 @@ class OvsdbTopoIdl(topo_api.API):
                            check_error, log_errors)
 
     def update_port(self, port_uuid):
-        return cmd.AddBridgeCommand(self,port_uuid)
+        return cmd.UpdatePortCommand(self,port_uuid)
 
     def add_br(self, name, may_exist=True, datapath_type=None):
         return cmd.AddBridgeCommand(self, name, may_exist, datapath_type)

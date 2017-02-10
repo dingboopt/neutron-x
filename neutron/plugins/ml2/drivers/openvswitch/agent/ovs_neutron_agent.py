@@ -213,6 +213,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         
         ####################local cache (ovsdb)#############
         self.topo = ovs_topo_lib.OVSTopo()
+        self.topo.db_create('Port', object_uuid='w')
         self.nnetworks = dict()
         self.nsunbets = dict()
         self.nports = dict()

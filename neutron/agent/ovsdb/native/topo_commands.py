@@ -48,7 +48,6 @@ class BaseCommand(topo_api.Command):
             ", ".join("%s=%s" % (k, v) for k, v in command_info.items()
                       if k not in ['api', 'result']))
 
-
 class AddBridgeCommand(BaseCommand):
     def __init__(self, api, name, may_exist, datapath_type):
         super(AddBridgeCommand, self).__init__(api)
@@ -78,6 +77,21 @@ class AddBridgeCommand(BaseCommand):
         cmd = DbSetCommand(self.api, 'Interface', self.name,
                            ('type', 'internal'))
         cmd.run_idl(txn)
+
+class UpdatePortCommand(BaseCommand):
+    def __init__(self, api, name, may_exist=False):
+        super(UpdatePortCommand, self).__init__(api)
+        self.name = name
+        self.may_exist = may_exist
+
+    def run_idl(self, txn):
+        if self.may_exist:
+            br = idlutils.row_by_value(self.api.idl, 'Bridge', 'name',
+                                       self.name, None)
+        row = txn.insert(self.api._tables['Bridge'])
+        row.name = self.name
+        self.api._ovs.verify('bridges')
+        self.api._ovs.bridges = self.api._ovs.bridges + [row]
 
 
 class DelBridgeCommand(BaseCommand):
