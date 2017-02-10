@@ -176,6 +176,11 @@ class DbCreateCommand(BaseCommand):
     def run_idl(self, txn):
         row = txn.insert(self.api._tables[self.table])
         for col, val in self.columns.items():
+            if isinstance(val, dict):
+                row[col] = {}
+                for key in val.keys():
+                    row[col][key] = val[key]
+                continue
             setattr(row, col, val)
         self.result = row
 
