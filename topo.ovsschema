@@ -6,6 +6,7 @@
         "Network":{
             "columns": {
                 "uuid": {"type": "string"},
+                "tenant": {"type": "string"},
                 "data": {
                     "type": {"key": "string", "value": "string",
                              "min": 0, "max": "unlimited"}}},
@@ -13,6 +14,7 @@
         "Subnet": {
             "columns": {
                 "uuid": {"type": "string"},
+                "tenant": {"type": "string"},
                 "network": {"type": "string"},
                 "data": {
                     "type": {"key": "string", "value": "string",
@@ -21,6 +23,7 @@
         "Port": {
             "columns": {
                 "uuid": {"type": "string"},
+                "tenant": {"type": "string"},
                 "network": {"type": "string"},
                 "host": {"type": "string"},
                 "data": {
