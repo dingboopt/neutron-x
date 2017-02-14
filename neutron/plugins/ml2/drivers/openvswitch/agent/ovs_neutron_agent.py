@@ -28,6 +28,8 @@ from oslo_service import systemd
 import six
 from six import moves
 
+from sqlalchemy import desc
+
 from neutron._i18n import _, _LE, _LI, _LW
 from neutron.agent.common import ip_lib
 from neutron.agent.common import ovs_lib
@@ -400,7 +402,10 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
             return tenant
         else:
             session = neutron_db_api.get_session()
-            port = session.query(models.Operation).first()
+            port = session.query(models.Operation).filter(
+                        models.Operation.object_uuid == lport
+                        ).order_by(desc(models.Operation.sequence)).first()
+                        
             if port is not None:
                 return port['tenant']
         return None
