@@ -48,6 +48,21 @@ class BaseCommand(topo_api.Command):
             ", ".join("%s=%s" % (k, v) for k, v in command_info.items()
                       if k not in ['api', 'result']))
 
+
+class DbCreateCommand(BaseCommand):
+    def __init__(self, api, table, **columns):
+        super(DbCreateCommand, self).__init__(api)
+        self.table = table
+        self.columns = columns
+
+    def run_idl(self, txn):
+        row = txn.insert(self.api._tables[self.table])
+        for col, val in self.columns.items():
+            setattr(row, col, val)
+        self.result = row
+
+
+
 class GetPortCommand(BaseCommand):
     def __init__(self, api, port_uuid):
         super(GetPortCommand, self).__init__(api)
