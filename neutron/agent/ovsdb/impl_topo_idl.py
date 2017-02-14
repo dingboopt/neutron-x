@@ -136,20 +136,3 @@ class OvsdbTopoIdl(topo_api.API):
     def db_create(self, table, **col_values):
         return cmd.DbCreateCommand(self, table, **col_values)
 
-    def db_destroy(self, table, record):
-        return cmd.DbDestroyCommand(self, table, record)
-
-    def db_set(self, table, record, *col_values):
-        return cmd.DbSetCommand(self, table, record, *col_values)
-
-    def db_clear(self, table, record, column):
-        return cmd.DbClearCommand(self, table, record, column)
-
-    def db_get(self, table, record, column):
-        return cmd.DbGetCommand(self, table, record, column)
-
-    def db_list(self, table, records=None, columns=None, if_exists=False):
-        return cmd.DbListCommand(self, table, records, columns, if_exists)
-
-    def db_find(self, table, *conditions, **kwargs):
-        return cmd.DbFindCommand(self, table, *conditions, **kwargs)
