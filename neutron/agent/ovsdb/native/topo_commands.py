@@ -70,7 +70,7 @@ class GetPortCommand(BaseCommand):
 
     def run_idl(self, txn):
         port = idlutils.row_by_value(self.api.idl, 'Port', 'port_uuid', self.port_uuid, None)
-        return port
+        self.result = port
 
 class UpdatePortCommand(BaseCommand):
     def __init__(self, api, port_uuid):
