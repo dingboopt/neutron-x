@@ -5,7 +5,7 @@
     "tables": {
         "Network":{
             "columns": {
-                "uuid": {"type": "string"},
+                "network_uuid": {"type": "string"},
                 "tenant": {"type": "string"},
                 "data": {
                     "type": {"key": "string", "value": "string",
@@ -13,7 +13,7 @@
             "isRoot": true},
         "Subnet": {
             "columns": {
-                "uuid": {"type": "string"},
+                "subnet_uuid": {"type": "string"},
                 "tenant": {"type": "string"},
                 "network": {"type": "string"},
                 "data": {
@@ -22,7 +22,7 @@
             "isRoot": true},
         "Port": {
             "columns": {
-                "uuid": {"type": "string"},
+                "port_uuid": {"type": "string"},
                 "tenant": {"type": "string"},
                 "network": {"type": "string"},
                 "host": {"type": "string"},
