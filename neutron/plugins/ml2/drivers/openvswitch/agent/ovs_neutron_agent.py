@@ -394,7 +394,8 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
     def _extract_tenant(self, lport):
         port = self.topo.get_port(lport)
         if port is not None:
-            return port['tenant']
+            tenant = getattr(port, 'tenant', None)
+            return tenant
         else:
             session = neutron_db_api.get_session()
             port = session.query(models.Operation).first()
