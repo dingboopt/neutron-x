@@ -65,40 +65,9 @@ class OVSTopo(object):
         self.vsctl_timeout = cfg.CONF.ovs_vsctl_timeout
         self.ovsdb = ovstopo.API.get(self)
 
+    def get_port(self, port_uuid):
+        return self.ovsdb.get_port(port_uuid).execute()
+
     def db_create(self, table, **col_values):
         return self.ovsdb.db_create(table, **col_values).execute()
 
-    def update_port(self, port_uuid):
-        self.ovsdb.update_port(port_uuid).execute()
-
-    def delete_bridge(self, bridge_name):
-        self.ovsdb.del_br(bridge_name).execute()
-
-    def bridge_exists(self, bridge_name):
-        return self.ovsdb.br_exists(bridge_name).execute()
-
-    def port_exists(self, port_name):
-        cmd = self.ovsdb.db_get('Port', port_name, 'name')
-        return bool(cmd.execute(check_error=False, log_errors=False))
-
-    def get_bridge_for_iface(self, iface):
-        return self.ovsdb.iface_to_br(iface).execute()
-
-    def get_bridges(self):
-        return self.ovsdb.list_br().execute(check_error=True)
-
-    def get_bridge_external_bridge_id(self, bridge):
-        return self.ovsdb.br_get_external_id(bridge, 'bridge-id').execute()
-
-    def set_db_attribute(self, table_name, record, column, value,
-                         check_error=False, log_errors=True):
-        self.ovsdb.db_set(table_name, record, (column, value)).execute(
-            check_error=check_error, log_errors=log_errors)
-
-    def clear_db_attribute(self, table_name, record, column):
-        self.ovsdb.db_clear(table_name, record, column).execute()
-
-    def db_get_val(self, table, record, column, check_error=False,
-                   log_errors=True):
-        return self.ovsdb.db_get(table, record, column).execute(
-            check_error=check_error, log_errors=log_errors)

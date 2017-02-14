@@ -390,33 +390,44 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         self.tun_br_ofports = {p_const.TYPE_GENEVE: {},
                                p_const.TYPE_GRE: {},
                                p_const.TYPE_VXLAN: {}}
+    
+    def _extract_tenant(self, lport):
+        port = self.topo.get_port(lport)
+        if port is not None:
+            return port['tenant']
+        else:
+            session = neutron_db_api.get_session()
+            port = session.query(models.Operation).first()
+            if port is not None:
+                return port['tenant']
+        return None
 
     def _process_ops(self):
         LOG.debug("pull ops from server")
         
         ####for test
-        if self.counter != 20:
-            self.counter = self.counter + 1
-            return
+#         if self.counter != 20:
+#             self.counter = self.counter + 1
+#             return
         
-        self.nports['port_uuid'] = {'device': device,
-                         'network_id': port['network_id'],
-                         'port_id': port['id'],
-                         'mac_address': port['mac_address'],
-                         'admin_state_up': port['admin_state_up'],
-                         'network_type': port['network_type'],
-                         'segmentation_id': port['segmentation_id'],
-                         'physical_network': port['physical_network'],
-                         'fixed_ips': port['fixed_ips'],
-                         'device_owner': port['device_owner'],
-                         'allowed_address_pairs': [],
-                         'port_security_enabled': False,
-                         'qos_policy_id': None,
-                         'network_qos_policy_id': None,
-                         'security_groups':port['security_groups'],
-                         'profile': {}}
+#         self.nports['port_uuid'] = {'device': device,
+#                          'network_id': port['network_id'],
+#                          'port_id': port['id'],
+#                          'mac_address': port['mac_address'],
+#                          'admin_state_up': port['admin_state_up'],
+#                          'network_type': port['network_type'],
+#                          'segmentation_id': port['segmentation_id'],
+#                          'physical_network': port['physical_network'],
+#                          'fixed_ips': port['fixed_ips'],
+#                          'device_owner': port['device_owner'],
+#                          'allowed_address_pairs': [],
+#                          'port_security_enabled': False,
+#                          'qos_policy_id': None,
+#                          'network_qos_policy_id': None,
+#                          'security_groups':port['security_groups'],
+#                          'profile': {}}
 
-        self.port_update(None, port={'id':'uuid'})
+#        self.port_update(None, port={'id':'uuid'})
         new_tenant = set()
         #1. extract tenants
         for lport in self.fail_lports:
@@ -440,7 +451,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
 
         #2. find l2 changes
         for lport in self.add_lports:
-            network = self._lport_to_subnet(lport)
+            network = self._lport_to_net(lport)
             if network is None:
                 continue
             elif network in self.lnetworks:

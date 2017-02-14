@@ -127,32 +127,11 @@ class OvsdbTopoIdl(topo_api.API):
                            self.context.vsctl_timeout,
                            check_error, log_errors)
 
+    def get_port(self, port_uuid):
+        return cmd.GetPortCommand(self,port_uuid)
+
     def update_port(self, port_uuid):
         return cmd.UpdatePortCommand(self,port_uuid)
-
-    def add_br(self, name, may_exist=True, datapath_type=None):
-        return cmd.AddBridgeCommand(self, name, may_exist, datapath_type)
-
-    def del_br(self, name, if_exists=True):
-        return cmd.DelBridgeCommand(self, name, if_exists)
-
-    def br_exists(self, name):
-        return cmd.BridgeExistsCommand(self, name)
-
-    def port_to_br(self, name):
-        return cmd.PortToBridgeCommand(self, name)
-
-    def iface_to_br(self, name):
-        return cmd.InterfaceToBridgeCommand(self, name)
-
-    def list_br(self):
-        return cmd.ListBridgesCommand(self)
-
-    def br_get_external_id(self, name, field):
-        return cmd.BrGetExternalIdCommand(self, name, field)
-
-    def br_set_external_id(self, name, field, value):
-        return cmd.BrSetExternalIdCommand(self, name, field, value)
 
     def db_create(self, table, **col_values):
         return cmd.DbCreateCommand(self, table, **col_values)
@@ -174,27 +153,3 @@ class OvsdbTopoIdl(topo_api.API):
 
     def db_find(self, table, *conditions, **kwargs):
         return cmd.DbFindCommand(self, table, *conditions, **kwargs)
-
-    def set_controller(self, bridge, controllers):
-        return cmd.SetControllerCommand(self, bridge, controllers)
-
-    def del_controller(self, bridge):
-        return cmd.DelControllerCommand(self, bridge)
-
-    def get_controller(self, bridge):
-        return cmd.GetControllerCommand(self, bridge)
-
-    def set_fail_mode(self, bridge, mode):
-        return cmd.SetFailModeCommand(self, bridge, mode)
-
-    def add_port(self, bridge, port, may_exist=True):
-        return cmd.AddPortCommand(self, bridge, port, may_exist)
-
-    def del_port(self, port, bridge=None, if_exists=True):
-        return cmd.DelPortCommand(self, port, bridge, if_exists)
-
-    def list_ports(self, bridge):
-        return cmd.ListPortsCommand(self, bridge)
-
-    def list_ifaces(self, bridge):
-        return cmd.ListIfacesCommand(self, bridge)
