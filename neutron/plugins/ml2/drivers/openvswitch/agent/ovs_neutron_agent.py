@@ -201,7 +201,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         self.add_lports = set()
         self.fail_lports = set()
         self.del_lports = set()
-        self.tenants = dict()
+        self.ltenants = dict()
         self.lnetworks = dict()
         self.lsubnets = dict()
         self.lrouters = dict()
@@ -495,9 +495,14 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                 #install all router resources(routes etc)
                 pass
 
-        #3. according to local tenants, pull ops.
+        
+        #3install new tenant
         for tenant in new_tenant:
-            self._install_new_tenant_rsc(new_tenant)
+            if tenant not in self.ltenants.keys():
+                self.ltenants[tenant] = 'new'
+                self._install_new_tenant_rsc(new_tenant)
+
+        #4. according to local tenants, pull ops.
         ops = self._pull_newops()
         for op in ops:
             #install op in south-bound
