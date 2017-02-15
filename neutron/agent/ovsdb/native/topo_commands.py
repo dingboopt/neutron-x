@@ -87,10 +87,17 @@ class GetPortCommand(BaseCommand):
         self.result = port
 
 class UpdatePortCommand(BaseCommand):
-    def __init__(self, api, port_uuid):
-        super(UpdatePortCommand, self).__init__(api, port_uuid)
+    def __init__(self, api,port_uuid, tenant, data):
+        super(UpdateNetCommand, self).__init__(api)
         self.port_uuid = port_uuid
+        self.tenant = tenant
+        self.data = data
 
     def run_idl(self, txn):
-        br = idlutils.row_by_value(self.api.idl, 'Port', 'uuid', self.port_uuid)
-        br.verify('controller')
+        port = idlutils.row_by_value(self.api.idl, 'Port', 'port_uuid', self.port_uuid, None)
+        if port is None:
+            port = txn.insert(self.api._tables['Port'])
+            
+        port.port_uuid = self.port_uuid
+        port.tenant = self.tenant
+        port.data = self.data

@@ -130,11 +130,11 @@ class OvsdbTopoIdl(topo_api.API):
     def update_net(self, net_uuid, tenant, data):
         return cmd.UpdateNetCommand(self,net_uuid, tenant, data)
 
+    def update_port(self, port_uuid, tenant, data):
+        return cmd.UpdatePortCommand(self,port_uuid, tenant, data)
+
     def get_port(self, port_uuid):
         return cmd.GetPortCommand(self,port_uuid)
-
-    def update_port(self, port_uuid):
-        return cmd.UpdatePortCommand(self,port_uuid)
 
     def db_create(self, table, **col_values):
         return cmd.DbCreateCommand(self, table, **col_values)

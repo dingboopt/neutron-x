@@ -68,6 +68,9 @@ class OVSTopo(object):
     def update_net(self, net_uuid, tenant, data):
         return self.ovsdb.update_net(net_uuid, tenant, data).execute()
 
+    def update_port(self, net_uuid, tenant, data):
+        return self.ovsdb.update_port(net_uuid, tenant, data).execute()
+
     def get_port(self, port_uuid):
         return self.ovsdb.get_port(port_uuid).execute()
 
