@@ -522,7 +522,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         for tenant in new_tenant:
             if tenant not in self.ltenants.keys():
                 self.ltenants[tenant] = 'new'
-                self._install_new_tenant_rsc(new_tenant)
+                self._install_new_tenant_rsc(tenant)
 
         #4. according to local tenants, pull ops.
         ops = self._pull_newops()
