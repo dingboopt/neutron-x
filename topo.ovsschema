@@ -25,6 +25,9 @@
                 "port_uuid": {"type": "string"},
                 "tenant": {"type": "string"},
                 "network": {"type": "string"},
+                "fixed_ips": {
+                    "type": {"key": "string", "value": "string",
+                             "min": 0, "max": "unlimited"}}},
                 "host": {"type": "string"},
                 "data": {
                     "type": {"key": "string", "value": "string",
