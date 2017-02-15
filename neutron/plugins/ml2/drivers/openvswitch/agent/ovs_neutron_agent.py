@@ -439,7 +439,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                     keyset = ('provider:physical_network', 'provider:network_type', 'provider:segmentation_id')
                     data = {}
                     for key in keyset:
-                        data[key] = op.data['current'][key]
+                        data[key] = str(op.data['current'][key])
                     self.topo.update_net(op.object_uuid, op.tenant_id, data)
 
     def _process_ops(self):
