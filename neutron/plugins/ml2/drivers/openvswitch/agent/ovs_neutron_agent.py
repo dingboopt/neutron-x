@@ -442,6 +442,17 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                         data[key] = str(op.data['current'][key])
                     self.topo.update_net(op.object_uuid, op.tenant_id, data)
 
+            if op.object_type == 'port':
+                if op.operation != 'delete':
+                    keyset = ('network_id', 'mac_address', 'admin_state_up', 
+                              'device_owner', 'port_security_enabled'
+                              )
+                    data = {}
+                    for key in keyset:
+                        data[key] = str(op.data['current'][key])
+                    self.topo.update_net(op.object_uuid, op.tenant_id, data)
+            
+
     def _process_ops(self):
         LOG.debug("pull ops from server")
         
