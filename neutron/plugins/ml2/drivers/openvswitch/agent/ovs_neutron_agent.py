@@ -409,7 +409,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                         ).order_by(desc(models.Operation.sequence)).first()
                         
             if port is not None:
-                return port['tenant']
+                return port['tenant_id']
         return None
 
     def _pull_newops(self):
