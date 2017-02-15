@@ -127,6 +127,9 @@ class OvsdbTopoIdl(topo_api.API):
                            self.context.vsctl_timeout,
                            check_error, log_errors)
 
+    def update_net(self, net_uuid, tenant, data):
+        return cmd.UpdateNetCommand(self,net_uuid, tenant, data)
+
     def get_port(self, port_uuid):
         return cmd.GetPortCommand(self,port_uuid)
 

@@ -433,7 +433,10 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
 
     def _install_ops(self, ops):
         for op in ops:
-            if op.
+            if op.object_type == 'network':
+                if op.operation != 'delete':
+                    data = op.data['current']
+                    self.topo.update_net(op.object_uuid, op.tenant_id, data)
 
     def _process_ops(self):
         LOG.debug("pull ops from server")

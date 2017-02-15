@@ -61,7 +61,21 @@ class DbCreateCommand(BaseCommand):
             setattr(row, col, val)
         self.result = row
 
+class UpdateNetCommand(BaseCommand):
+    def __init__(self, api,net_uuid, tenant, data):
+        super(UpdateNetCommand, self).__init__(api)
+        self.net_uuid = net_uuid
+        self.tenant = tenant
+        self.data = data
 
+    def run_idl(self, txn):
+        net = idlutils.row_by_value(self.api.idl, 'Network', 'network_uuid', self.net_uuid, None)
+        if net is None:
+            net = txn.insert(self.api._tables['Network'])
+            
+        net.network_uuid = self.net_uuid
+        net.tenant = self.tenant
+        net.data = self.data
 
 class GetPortCommand(BaseCommand):
     def __init__(self, api, port_uuid):
