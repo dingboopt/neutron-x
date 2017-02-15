@@ -430,6 +430,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                      models.Operation.sequence>self.lsequence)
                 ).order_by(models.Operation.sequence).all()
         LOG.debug("ops is %s \n\n\n\n\n" %ops)
+        self._install_ops(ops)
 
     def _install_ops(self, ops):
         for op in ops:
