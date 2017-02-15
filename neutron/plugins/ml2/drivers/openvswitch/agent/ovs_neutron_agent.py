@@ -422,6 +422,14 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                      models.Operation.sequence>self.lsequence)
                 ).order_by(models.Operation.sequence).all()
         return ops
+
+    def _install_new_tenant_rsc(self, new_tenant):
+        session = neutron_db_api.get_session()
+        ops = session.query(models.Operation).filter(
+                and_(models.Operation.tenant_id == new_tenant,
+                     models.Operation.sequence>self.lsequence)
+                ).order_by(models.Operation.sequence).all()
+        LOG.debug("ops is %s \n\n\n\n\n" %ops)
     
     def _process_ops(self):
         LOG.debug("pull ops from server")
