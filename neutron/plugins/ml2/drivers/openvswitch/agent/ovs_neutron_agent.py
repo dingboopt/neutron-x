@@ -436,8 +436,10 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         for op in ops:
             if op.object_type == 'network':
                 if op.operation != 'delete':
-                    data = op.data['current']
-                    data = {'bitch': 'yy'}
+                    keyset = ('provider:physical_network', 'provider:network_type', 'provider:segmentation_id')
+                    data = {}
+                    for key in keyset:
+                        data[key] = op.data['current'][key]
                     self.topo.update_net(op.object_uuid, op.tenant_id, data)
 
     def _process_ops(self):
