@@ -88,7 +88,7 @@ class GetPortCommand(BaseCommand):
 
 class UpdatePortCommand(BaseCommand):
     def __init__(self, api,port_uuid, tenant, data):
-        super(UpdateNetCommand, self).__init__(api)
+        super(UpdatePortCommand, self).__init__(api)
         self.port_uuid = port_uuid
         self.tenant = tenant
         self.data = data

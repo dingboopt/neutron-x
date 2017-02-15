@@ -450,7 +450,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                     data = {}
                     for key in keyset:
                         data[key] = str(op.data['current'][key])
-                    self.topo.update_net(op.object_uuid, op.tenant_id, data)
+                    self.topo.update_port(op.object_uuid, op.tenant_id, data)
             
 
     def _process_ops(self):
