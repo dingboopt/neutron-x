@@ -457,13 +457,14 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                 continue
             else:
                 new_tenant.add(tenant)
+
         for lport in self.add_lports:
             tenant = self._extract_tenant(lport)
             if tenant is None:
                 self.fail_lports.add(lport)
-                self.add_lports.remove(lport)
             else:
                 new_tenant.add(tenant)
+        self.add_lports = set()
 
         for lport in self.del_lports:
             #1. timestamp tenants of cunter 0
