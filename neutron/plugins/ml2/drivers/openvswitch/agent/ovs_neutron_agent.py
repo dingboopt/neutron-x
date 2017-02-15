@@ -29,6 +29,7 @@ import six
 from six import moves
 
 from sqlalchemy import desc
+from sqlalchemy import and_
 
 from neutron._i18n import _, _LE, _LI, _LW
 from neutron.agent.common import ip_lib
@@ -197,6 +198,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         self.vifname_to_ofport_map = {}
         
         ##################################
+        self.lsequence = 0
         self.cur_lports = set()
         self.add_lports = set()
         self.fail_lports = set()
@@ -410,6 +412,17 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                 return port['tenant']
         return None
 
+    def _pull_newops(self):
+        tenant = []
+        for tenant in self.ltenants:
+            tenant.append(tenant)
+        session = neutron_db_api.get_session()
+        ops = session.query(models.Operation).filter(
+                and_(models.Operation.tenant_id in tenant,
+                     models.Operation.sequence>self.lsequence)
+                ).order_by(models.Operation.sequence).all()
+        return ops
+    
     def _process_ops(self):
         LOG.debug("pull ops from server")
         
