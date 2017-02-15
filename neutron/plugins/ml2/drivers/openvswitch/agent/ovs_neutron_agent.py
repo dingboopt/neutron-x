@@ -217,9 +217,6 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         
         ####################local cache (ovsdb)#############
         self.topo = ovs_topo_lib.OVSTopo()
-        result = self.topo.db_create('Port', port_uuid='w',  data={'bitch': 'yy'})
-        t = self._extract_tenant('w')
-        print "%s result \n\n\n\n\n\n\n" %t
         self.nnetworks = dict()
         self.nsunbets = dict()
         self.nports = dict()
@@ -450,7 +447,11 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                     data = {}
                     for key in keyset:
                         data[key] = str(op.data['current'][key])
-                    self.topo.update_port(op.object_uuid, op.tenant_id, data)
+
+                    fixed_ips = {}
+                    for fixed_ip in op.data['current']['fixed_ips']:
+                        fixed_ips[fixed_ip['ip_address']] = fixed_ip['subnet_id']
+                    self.topo.update_port(op.object_uuid, op.tenant_id, data, fixed_ips)
             
 
     def _process_ops(self):
