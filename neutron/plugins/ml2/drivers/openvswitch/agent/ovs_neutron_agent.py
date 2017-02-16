@@ -441,6 +441,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
 
             if op.object_type == 'port':
                 if op.operation != 'delete':
+                    #1. port update message
                     keyset = ('network_id', 'mac_address', 'admin_state_up', 
                               'device_owner', 'port_security_enabled'
                               )
@@ -452,6 +453,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                     for fixed_ip in op.data['current']['fixed_ips']:
                         fixed_ips[fixed_ip['ip_address']] = fixed_ip['subnet_id']
                     self.topo.update_port(op.object_uuid, op.tenant_id, data, fixed_ips)
+                    self.port_update(None, port={'id':'uuid'})
             
 
     def _process_ops(self):
@@ -1654,6 +1656,8 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         failed_devices = []
         for device in devices:
             if device in self.nports.keys():
+                port_net = self.topo.get_port_details(device)
+                print port_net
                 port = self.nports[device]
                 entry = {'device': device,
                          'network_id': port['network_id'],

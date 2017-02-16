@@ -136,6 +136,9 @@ class OvsdbTopoIdl(topo_api.API):
     def get_port(self, port_uuid):
         return cmd.GetPortCommand(self,port_uuid)
 
+    def get_port_details(self, port_uuid):
+        return cmd.GetPortDetailsCommand(self,port_uuid)
+
     def db_create(self, table, **col_values):
         return cmd.DbCreateCommand(self, table, **col_values)
 

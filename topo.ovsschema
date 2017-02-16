@@ -35,6 +35,12 @@
                 "data": {
                     "type": {"key": "string", "value": "string",
                              "min": 0, "max": "unlimited"}}},
+            "isRoot": true},
+        "Tenant": {
+            "columns": {
+                "tenant": {"type": "string"},
+                "status": {"type": "string"},
+				"sequence": {"type": "string"},},
             "isRoot": true}
     }
 }

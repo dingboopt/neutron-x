@@ -86,6 +86,18 @@ class GetPortCommand(BaseCommand):
         port = idlutils.row_by_value(self.api.idl, 'Port', 'port_uuid', self.port_uuid, None)
         self.result = port
 
+class GetPortDetailsCommand(BaseCommand):
+    def __init__(self, api, port_uuid):
+        super(GetPortDetailsCommand, self).__init__(api)
+        self.port_uuid = port_uuid
+
+    def run_idl(self, txn):
+        port = idlutils.row_by_value(self.api.idl, 'Port', 'port_uuid', self.port_uuid, None)
+        net_id = port.network
+        net = idlutils.row_by_value(self.api.idl, 'Network', 'net_uuid', net_id, None)
+        
+        self.result = (port, net)
+
 class UpdatePortCommand(BaseCommand):
     def __init__(self, api,port_uuid, tenant, data, fixed_ips):
         super(UpdatePortCommand, self).__init__(api)
