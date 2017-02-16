@@ -74,6 +74,9 @@ class OVSTopo(object):
     def get_port(self, port_uuid):
         return self.ovsdb.get_port(port_uuid).execute()
 
+    def get_port_details(self, port_uuid):
+        return self.ovsdb.get_port_details(port_uuid).execute()
+
     def db_create(self, table, **col_values):
         return self.ovsdb.db_create(table, **col_values).execute()
 
