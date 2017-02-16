@@ -1655,10 +1655,11 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         suc_devices = []
         failed_devices = []
         for device in devices:
-            if device in self.nports.keys():
-                port_net = self.topo.get_port_details(device)
-                print port_net
-                print "\n\n\n\n\n\n\n\n\n\n\n\n"
+            #if device in self.nports.keys():
+            port_net = self.topo.get_port_details(device)
+            print port_net
+            print "\n\n\n\n\n\n\n\n\n\n\n\n"
+            if port_net is not None:
                 port = self.nports[device]
                 entry = {'device': device,
                          'network_id': port['network_id'],
