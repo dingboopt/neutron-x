@@ -95,8 +95,26 @@ class GetPortDetailsCommand(BaseCommand):
         port = idlutils.row_by_value(self.api.idl, 'Port', 'port_uuid', self.port_uuid, None)
         net_id = port.data['network_id']
         net = idlutils.row_by_value(self.api.idl, 'Network', 'network_uuid', net_id, None)
-        
-        self.result = (port, net)
+        fixed_ips = []
+        for ip in port.fixed_ips.keys():
+            fixed_ips.append({'subnet_id': port.fixed_ips[ip], 'ip':ip})
+        entry = {'device': self.port_uuid,
+         'network_id': port.data['network_id'],
+         'port_id': self.port_uuid,
+         'mac_address': port.data['mac_address'],
+         'admin_state_up': True if port.data['admin_state_up'] ==  'True' else False,
+         'network_type': net.data['provider:network_type'],
+         'segmentation_id': int(net.data['provider:segmentation_id']),
+         'physical_network': None if net.data['provider:physical_network'] == 'None' else net.data['provider:physical_network'],
+         'fixed_ips': fixed_ips,
+         'device_owner': port.data['device_owner'],
+         'allowed_address_pairs': [],
+         'port_security_enabled': False,
+         'qos_policy_id': None,
+         'network_qos_policy_id': None,
+         #'security_groups':port['security_groups'],
+         'profile': {}}
+        self.result = entry
 
 class UpdatePortCommand(BaseCommand):
     def __init__(self, api,port_uuid, tenant, data, fixed_ips):
