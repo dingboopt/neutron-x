@@ -99,9 +99,10 @@ class PluginApi(object):
               get_devices_details_list_and_failed_devices
     '''
 
-    def __init__(self, topic):
+    def __init__(self, topic, topo):
         target = oslo_messaging.Target(topic=topic, version='1.0')
         self.client = n_rpc.get_client(target)
+        self.topo = topo
 
     def get_device_details(self, context, device, agent_id, host=None):
         raise
@@ -135,18 +136,22 @@ class PluginApi(object):
         retrieving the devices details, the device is put in a list of
         failed devices.
         """
-        raise
-        try:
-            cctxt = self.client.prepare(version='1.5')
-            res = cctxt.call(
-                context,
-                'get_devices_details_list_and_failed_devices',
-                devices=devices, agent_id=agent_id, host=host)
-        except oslo_messaging.UnsupportedVersion:
-            #TODO(rossella_s): Remove this failback logic in M
-            res = self._device_list_rpc_call_with_failed_dev(
-                self.get_device_details, context, agent_id, host, devices)
-        return res
+        suc_devices = []
+        failed_devices = []
+        for device in devices:
+            #if device in self.nports.keys():
+            entry = self.topo.get_port_details(device)
+            print entry
+            print "\n\n\n\n\n\n\n\n\n\n\n\n"
+            if entry is not None:
+                LOG.debug("Returning: %s!!!!!!!!", entry)
+                suc_devices.append(entry)
+            else:
+                LOG.debug("device %s not sync yet!!!!!!!!!!1", device)
+                failed_devices.append(device)
+
+        return {'devices': suc_devices,
+                'failed_devices': failed_devices}
 
     def update_device_down(self, context, device, agent_id, host=None):
         cctxt = self.client.prepare()

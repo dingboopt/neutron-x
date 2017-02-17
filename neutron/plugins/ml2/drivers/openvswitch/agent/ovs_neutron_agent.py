@@ -557,7 +557,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
             pass
 
     def setup_rpc(self):
-        self.plugin_rpc = OVSPluginApi(topics.PLUGIN)
+        self.plugin_rpc = OVSPluginApi(topics.PLUGIN, self.topo)
         self.sg_plugin_rpc = sg_rpc.SecurityGroupServerRpcApi(topics.PLUGIN)
         self.dvr_plugin_rpc = dvr_rpc.DVRServerRpcApi(topics.PLUGIN)
         self.state_rpc = agent_rpc.PluginReportStateAPI(topics.REPORTS)
@@ -1674,7 +1674,7 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
         need_binding_devices = []
         security_disabled_devices = []
         devices_details_list = (
-            self.get_devices_details_list_and_failed_devices(
+            self.plugin_rpc.get_devices_details_list_and_failed_devices(
                 self.context,
                 devices,
                 self.agent_id,
