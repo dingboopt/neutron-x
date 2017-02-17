@@ -1,0 +1,46 @@
+{
+    "name": "Topo",
+    "version": "0.0.1",
+    "cksum": "4176761817 11225",
+    "tables": {
+        "Network":{
+            "columns": {
+                "network_uuid": {"type": "string"},
+                "tenant": {"type": "string"},
+                "data": {
+                    "type": {"key": "string", "value": "string",
+                             "min": 0, "max": "unlimited"}}},
+            "isRoot": true},
+        "Subnet": {
+            "columns": {
+                "subnet_uuid": {"type": "string"},
+                "tenant": {"type": "string"},
+                "network": {"type": "string"},
+                "data": {
+                    "type": {"key": "string", "value": "string",
+                             "min": 0, "max": "unlimited"}}},
+            "isRoot": true},
+        "Port": {
+            "columns": {
+                "port_uuid": {"type": "string"},
+                "tenant": {"type": "string"},
+                "network": {"type": "string"},
+                "fixed_ips": {
+                    "type": {"key": "string", "value": "string",
+                             "min": 0, "max": "unlimited"}},
+                "security_groups": {
+                    "type": {"key": "string",
+                             "min": 0, "max": "unlimited"}},
+                "host": {"type": "string"},
+                "data": {
+                    "type": {"key": "string", "value": "string",
+                             "min": 0, "max": "unlimited"}}},
+            "isRoot": true},
+        "Tenant": {
+            "columns": {
+                "tenant": {"type": "string"},
+                "status": {"type": "string"},
+				"sequence": {"type": "string"},},
+            "isRoot": true}
+    }
+}
