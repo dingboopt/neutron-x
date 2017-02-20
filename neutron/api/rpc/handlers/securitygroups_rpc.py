@@ -202,7 +202,6 @@ class SecurityGroupAgentRpcCallbackMixin(object):
         if not self.sg_agent:
             return self._security_groups_agent_not_set()
         
-        self.topo.update_sg_rule()
         self.sg_agent.security_groups_rule_updated(security_groups)
 
     def security_groups_member_updated(self, context, **kwargs):
