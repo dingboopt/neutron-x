@@ -406,11 +406,11 @@ class SecurityGroupDbMixin(ext_sg.SecurityGroupPluginBase):
                 description=rule_dict.get('description')
             )
             context.session.add(db)
+            res_rule_dict = self._make_security_group_rule_dict(db)
+            kwargs['security_group_rule'] = res_rule_dict
             self._registry_notify(resources.SECURITY_GROUP_RULE,
                               events.PRECOMMIT_CREATE,
                               exc_cls=ext_sg.SecurityGroupConflict, **kwargs)
-        res_rule_dict = self._make_security_group_rule_dict(db)
-        kwargs['security_group_rule'] = res_rule_dict
         registry.notify(
             resources.SECURITY_GROUP_RULE, events.AFTER_CREATE, self,
             **kwargs)
