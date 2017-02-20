@@ -54,7 +54,7 @@
             "columns": {
                 "tenant": {"type": "string"},
                 "status": {"type": "string"},
-				"sequence": {"type": "string"},},
+                "sequence": {"type": "string"}},
             "isRoot": true}
     }
 }
