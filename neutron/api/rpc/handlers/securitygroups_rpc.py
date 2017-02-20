@@ -34,13 +34,15 @@ class SecurityGroupServerRpcApi(object):
     SecurityGroupServerRpcCallback.  For more information about changing rpc
     interfaces, see doc/source/devref/rpc_api.rst.
     """
-    def __init__(self, topic):
+    def __init__(self, topic, topo):
         target = oslo_messaging.Target(
             topic=topic, version='1.0',
             namespace=constants.RPC_NAMESPACE_SECGROUP)
         self.client = n_rpc.get_client(target)
+        self.topo = topo
 
     def security_group_rules_for_devices(self, context, devices):
+        raise
         LOG.debug("Get security group rules "
                   "for devices via rpc %r", devices)
         cctxt = self.client.prepare(version='1.1')
@@ -57,7 +59,7 @@ class SecurityGroupServerRpcApi(object):
 
 class SecurityGroupServerRpcCallback(object):
     """Callback for SecurityGroup agent RPC in plugin implementations.
-
+    
     This class implements the server side of an rpc interface.  The client side
     can be found in SecurityGroupServerRpcApi. For more information on changing
     rpc interfaces, see doc/source/devref/rpc_api.rst.
@@ -199,6 +201,8 @@ class SecurityGroupAgentRpcCallbackMixin(object):
                   security_groups)
         if not self.sg_agent:
             return self._security_groups_agent_not_set()
+        
+        self.topo.update_sg_rule()
         self.sg_agent.security_groups_rule_updated(security_groups)
 
     def security_groups_member_updated(self, context, **kwargs):
