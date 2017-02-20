@@ -182,7 +182,7 @@ class SecurityGroupDbMixin(ext_sg.SecurityGroupPluginBase):
                     direction='egress',
                     ethertype=ethertype)
                 context.session.add(egress_rule)
-                context.session.flash()
+                context.session.flush()
             secgrouop_dict =self._make_security_group_dict(security_group_db)
             kwargs['security_group'] = secgrouop_dict
 
