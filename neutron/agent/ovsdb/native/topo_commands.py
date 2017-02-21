@@ -139,7 +139,7 @@ class UpdatePortCommand(BaseCommand):
         port.fixed_ips = self.fixed_ips
 
 class UpdateSgruleCommand(BaseCommand):
-    def __init__(self, api,sgrule_id, security_group_id, tenant_id, remote_group_id, description, port_range_min,
+    def __init__(self, api,sgrule_id, security_group_id, tenant_id, description, port_range_min,
                          port_range_max, remote_group_id, direction, ethertype, remote_ip_prefix, protocol):
         super(UpdateSgruleCommand, self).__init__(api)
         self.sgrule_id = sgrule_id
