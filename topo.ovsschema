@@ -28,7 +28,7 @@
                 "remote_group_id": {"type": "string"},
                 "direction":  {"type": "string"},
                 "ethertype":  {"type": "string"},
-                "protocol":  {"type": "string"},
+                "description":  {"type": "string"},
                 "port_range_min":  {"type": "string"},
                 "port_range_max":  {"type": "string"},
                 "remote_ip_prefix":  {"type": "string"},

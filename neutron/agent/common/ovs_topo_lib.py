@@ -71,6 +71,11 @@ class OVSTopo(object):
     def update_port(self, net_uuid, tenant, data, fixed_ips):
         return self.ovsdb.update_port(net_uuid, tenant, data, fixed_ips).execute(check_error=True)
 
+    def update_sgrule(self, sgrule_id, security_group_id, tenant_id, description, port_range_min,
+                         port_range_max, remote_group_id, direction, ethertype, remote_ip_prefix, protocol):
+        return self.ovsdb.update_sgrule(sgrule_id, security_group_id, tenant_id, description, port_range_min,
+                         port_range_max, remote_group_id, direction, ethertype, remote_ip_prefix, protocol).execute(check_error=True)
+
     def get_port(self, port_uuid):
         return self.ovsdb.get_port(port_uuid).execute(check_error=True)
 

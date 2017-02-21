@@ -458,6 +458,13 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
             
             if op.object_type == 'security_group':
                 if op.operation != 'delete':
+                    sgrules = op.data['security_group_rules']
+                    for sgrule in sgrules:
+                        self.topo.update_sgrule(sgrule['id'], sgrule['security_group_id'], sgrule['tenant_id'], 
+                                                sgrule['description'], str(sgrule['port_range_min']), str(sgrule['port_range_max']),
+                                                sgrule['remote_group_id'], sgrule['direction'], sgrule['ethertype'],
+                                                sgrule['remote_ip_prefix'], sgrule['protocol'])
+                    
                     #1. store topo
                     pass
             

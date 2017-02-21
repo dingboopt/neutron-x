@@ -133,6 +133,11 @@ class OvsdbTopoIdl(topo_api.API):
     def update_port(self, port_uuid, tenant, data, fixed_ips):
         return cmd.UpdatePortCommand(self,port_uuid, tenant, data, fixed_ips)
 
+    def update_sgrule(self, sgrule_id, security_group_id, tenant_id, description, port_range_min,
+                         port_range_max, remote_group_id, direction, ethertype, remote_ip_prefix, protocol):
+        return cmd.UpdateSgruleCommand(self,sgrule_id, security_group_id, tenant_id, description, port_range_min,
+                         port_range_max, remote_group_id, direction, ethertype, remote_ip_prefix, protocol)
+
     def get_port(self, port_uuid):
         return cmd.GetPortCommand(self,port_uuid)
 

@@ -137,3 +137,36 @@ class UpdatePortCommand(BaseCommand):
         port.tenant = self.tenant
         port.data = self.data
         port.fixed_ips = self.fixed_ips
+
+class UpdateSgruleCommand(BaseCommand):
+    def __init__(self, api,sgrule_id, security_group_id, tenant_id, remote_group_id, description, port_range_min,
+                         port_range_max, remote_group_id, direction, ethertype, remote_ip_prefix, protocol):
+        super(UpdateSgruleCommand, self).__init__(api)
+        self.sgrule_id = sgrule_id
+        self.security_group_id = security_group_id
+        self.tenant_id = tenant_id
+        self.description = description
+        self.port_range_min = port_range_min
+        self.port_range_max = port_range_max
+        self.remote_group_id = remote_group_id
+        self.direction = direction
+        self.ethertype = ethertype
+        self.remote_ip_prefix = remote_ip_prefix
+        self.protocol = protocol
+
+    def run_idl(self, txn):
+        sgrule = idlutils.row_by_value(self.api.idl, 'Sgrule', 'sgrule_id', self.sgrule_id, None)
+        if sgrule is None:
+            sgrule = txn.insert(self.api._tables['Sgrule'])
+            
+        sgrule.sgrule_id = self.sgrule_id
+        sgrule.security_group_id = self.security_group_id
+        sgrule.tenant_id = self.tenant_id
+        sgrule.description = self.description
+        sgrule.port_range_min = self.port_range_min
+        sgrule.port_range_max = self.port_range_max
+        sgrule.remote_group_id = self.remote_group_id
+        sgrule.direction = self.direction 
+        sgrule.ethertype = self.ethertype 
+        sgrule.remote_ip_prefix = self.remote_ip_prefix
+        sgrule.protocol = self.protocol
