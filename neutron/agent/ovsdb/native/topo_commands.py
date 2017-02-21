@@ -161,7 +161,7 @@ class UpdateSgruleCommand(BaseCommand):
             
         sgrule.sgrule_uuid = self.sgrule_id
         sgrule.sg_uuid = self.security_group_id
-        sgrule.tenant_id = self.tenant_id
+        sgrule.tenant = self.tenant_id
         sgrule.description = self.description
         sgrule.port_range_min = self.port_range_min
         sgrule.port_range_max = self.port_range_max
