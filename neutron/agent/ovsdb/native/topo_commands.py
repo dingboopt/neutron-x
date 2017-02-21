@@ -93,8 +93,12 @@ class GetPortDetailsCommand(BaseCommand):
 
     def run_idl(self, txn):
         port = idlutils.row_by_value(self.api.idl, 'Port', 'port_uuid', self.port_uuid, None)
+        if port is None:
+            return None
         net_id = port.data['network_id']
         net = idlutils.row_by_value(self.api.idl, 'Network', 'network_uuid', net_id, None)
+        if net is None:
+            return None
         fixed_ips = []
         for ip in port.fixed_ips.keys():
             fixed_ips.append({'subnet_id': port.fixed_ips[ip], 'ip':ip})

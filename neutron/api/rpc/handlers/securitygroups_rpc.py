@@ -52,9 +52,9 @@ class SecurityGroupServerRpcApi(object):
     def security_group_info_for_devices(self, context, devices):
         LOG.debug("Get security group information for devices via rpc %r",
                   devices)
-        cctxt = self.client.prepare(version='1.2')
-        return cctxt.call(context, 'security_group_info_for_devices',
-                          devices=devices)
+
+        ports = self.topo.get_devices_info(context, devices)
+        return self.topo.security_group_info_for_ports(context, ports)
 
 
 class SecurityGroupServerRpcCallback(object):
