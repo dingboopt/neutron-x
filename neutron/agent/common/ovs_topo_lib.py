@@ -66,18 +66,23 @@ class OVSTopo(object):
         self.ovsdb = ovstopo.API.get(self)
     
     def update_net(self, net_uuid, tenant, data):
-        return self.ovsdb.update_net(net_uuid, tenant, data).execute()
+        return self.ovsdb.update_net(net_uuid, tenant, data).execute(check_error=True)
 
     def update_port(self, net_uuid, tenant, data, fixed_ips):
-        return self.ovsdb.update_port(net_uuid, tenant, data, fixed_ips).execute()
+        return self.ovsdb.update_port(net_uuid, tenant, data, fixed_ips).execute(check_error=True)
 
     def get_port(self, port_uuid):
-        return self.ovsdb.get_port(port_uuid).execute()
+        return self.ovsdb.get_port(port_uuid).execute(check_error=True)
 
     def get_port_details(self, port_uuid):
         return self.ovsdb.get_port_details(port_uuid).execute(check_error=True)
-        
+    
+    def get_devices_info(self, port_uuids):
+        pass
+
+    def security_group_info_for_ports(self, port_uuids):
+        pass
 
     def db_create(self, table, **col_values):
-        return self.ovsdb.db_create(table, **col_values).execute()
+        return self.ovsdb.db_create(table, **col_values).execute(check_error=True)
 
