@@ -53,8 +53,8 @@ class SecurityGroupServerRpcApi(object):
         LOG.debug("Get security group information for devices via rpc %r",
                   devices)
 
-        ports = self.topo.get_devices_info(context, devices)
-        return self.topo.security_group_info_for_ports(context, ports)
+        ports = self.topo.get_devices_info(devices)
+        return self.topo.security_group_info_for_ports(ports)
 
 
 class SecurityGroupServerRpcCallback(object):
