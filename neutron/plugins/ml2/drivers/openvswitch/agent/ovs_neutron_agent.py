@@ -1661,31 +1661,6 @@ class OVSNeutronAgent(sg_rpc.SecurityGroupAgentRpcCallbackMixin,
                     self.tun_br_ofports[tunnel_type].pop(remote_ip, None)
 
 
-    def get_devices_details_list_and_failed_devices(self, context, devices,
-                                                    agent_id, host=None):
-        """Get devices details and the list of devices that failed.
-
-        This method returns the devices details. If an error is thrown when
-        retrieving the devices details, the device is put in a list of
-        failed devices.
-        """
-        suc_devices = []
-        failed_devices = []
-        for device in devices:
-            #if device in self.nports.keys():
-            entry = self.topo.get_port_details(device)
-            print entry
-            print "\n\n\n\n\n\n\n\n\n\n\n\n"
-            if entry is not None:
-                LOG.debug("Returning: %s!!!!!!!!", entry)
-                suc_devices.append(entry)
-            else:
-                LOG.debug("device %s not sync yet!!!!!!!!!!1", device)
-                failed_devices.append(device)
-
-        return {'devices': suc_devices,
-                'failed_devices': failed_devices}
-
     def treat_devices_added_or_updated(self, devices, ovs_restarted):
         skipped_devices = []
         need_binding_devices = []
