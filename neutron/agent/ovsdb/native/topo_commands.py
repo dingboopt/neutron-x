@@ -160,7 +160,7 @@ class UpdateSgruleCommand(BaseCommand):
             sgrule = txn.insert(self.api._tables['Sgrule'])
             
         sgrule.sgrule_uuid = self.sgrule_id
-        sgrule.security_group_id = self.security_group_id
+        sgrule.sg_uuid = self.security_group_id
         sgrule.tenant_id = self.tenant_id
         sgrule.description = self.description
         sgrule.port_range_min = self.port_range_min
