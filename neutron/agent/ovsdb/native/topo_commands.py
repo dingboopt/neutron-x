@@ -155,11 +155,11 @@ class UpdateSgruleCommand(BaseCommand):
         self.protocol = protocol
 
     def run_idl(self, txn):
-        sgrule = idlutils.row_by_value(self.api.idl, 'Sgrule', 'sgrule_id', self.sgrule_id, None)
+        sgrule = idlutils.row_by_value(self.api.idl, 'Sgrule', 'sgrule_uuid', self.sgrule_id, None)
         if sgrule is None:
             sgrule = txn.insert(self.api._tables['Sgrule'])
             
-        sgrule.sgrule_id = self.sgrule_id
+        sgrule.sgrule_uuid = self.sgrule_id
         sgrule.security_group_id = self.security_group_id
         sgrule.tenant_id = self.tenant_id
         sgrule.description = self.description
